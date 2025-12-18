@@ -1,0 +1,101 @@
+name: Release Binaries
+
+on:
+  push:
+    tags:
+      - "v*" # Triggers on version tags like v1.0.0, v1.0.1, etc.
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+
+      - name: Build binaries
+        run: |
+          # Create bin directory
+          mkdir -p bin
+
+          # Build for Windows (amd64)
+          GOOS=windows GOARCH=amd64 go build -o bin/adcov-windows-amd64.exe base64_converter.go
+
+          # Build for Linux (amd64)
+          GOOS=linux GOARCH=amd64 go build -o bin/adcov-linux-amd64 base64_converter.go
+
+          # Build for Linux (arm64)
+          GOOS=linux GOARCH=arm64 go build -o bin/adcov-linux-arm64 base64_converter.go
+
+          # Build for macOS (amd64 - Intel)
+          GOOS=darwin GOARCH=amd64 go build -o bin/adcov-darwin-amd64 base64_converter.go
+
+          # Build for macOS (arm64 - Apple Silicon)
+          GOOS=darwin GOARCH=arm64 go build -o bin/adcov-darwin-arm64 base64_converter.go
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/adcov-windows-amd64.exe
+          asset_name: adcov-windows-amd64.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Linux amd64 Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/adcov-linux-amd64
+          asset_name: adcov-linux-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload Linux arm64 Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/adcov-linux-arm64
+          asset_name: adcov-linux-arm64
+          asset_content_type: application/octet-stream
+
+      - name: Upload macOS amd64 Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/adcov-darwin-amd64
+          asset_name: adcov-darwin-amd64
+          asset_content_type: application/octet-stream
+
+      - name: Upload macOS arm64 Binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./bin/adcov-darwin-arm64
+          asset_name: adcov-darwin-arm64
+          asset_content_type: application/octet-stream
