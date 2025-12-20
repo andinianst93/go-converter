@@ -56,8 +56,8 @@ go build -o devtools
 ### Run the Program
 
 ```bash
-./devtools        # Linux/macOS
-devtools.exe  # Windows
+./devutils        # Linux/macOS
+devutils.exe  # Windows
 ```
 
 ## Usage
