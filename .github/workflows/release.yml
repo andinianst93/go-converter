@@ -17,7 +17,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.21"
+          go-version: "1.25"
+
+      - name: Download dependencies
+        run: go mod download
 
       - name: Build binaries
         run: |
@@ -25,19 +28,19 @@ jobs:
           mkdir -p bin
 
           # Build for Windows (amd64)
-          GOOS=windows GOARCH=amd64 go build -o bin/adcov-windows-amd64.exe base64_converter.go
+          GOOS=windows GOARCH=amd64 go build -o bin/devutils-windows-amd64.exe main.go
 
           # Build for Linux (amd64)
-          GOOS=linux GOARCH=amd64 go build -o bin/adcov-linux-amd64 base64_converter.go
+          GOOS=linux GOARCH=amd64 go build -o bin/devutils-linux-amd64 main.go
 
           # Build for Linux (arm64)
-          GOOS=linux GOARCH=arm64 go build -o bin/adcov-linux-arm64 base64_converter.go
+          GOOS=linux GOARCH=arm64 go build -o bin/devutils-linux-arm64 main.go
 
           # Build for macOS (amd64 - Intel)
-          GOOS=darwin GOARCH=amd64 go build -o bin/adcov-darwin-amd64 base64_converter.go
+          GOOS=darwin GOARCH=amd64 go build -o bin/devutils-darwin-amd64 main.go
 
           # Build for macOS (arm64 - Apple Silicon)
-          GOOS=darwin GOARCH=arm64 go build -o bin/adcov-darwin-arm64 base64_converter.go
+          GOOS=darwin GOARCH=arm64 go build -o bin/devutils-darwin-arm64 main.go
 
       - name: Create Release
         id: create_release
@@ -56,8 +59,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/adcov-windows-amd64.exe
-          asset_name: adcov-windows-amd64.exe
+          asset_path: ./bin/devutils-windows-amd64.exe
+          asset_name: devutils-windows-amd64.exe
           asset_content_type: application/octet-stream
 
       - name: Upload Linux amd64 Binary
@@ -66,8 +69,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/adcov-linux-amd64
-          asset_name: adcov-linux-amd64
+          asset_path: ./bin/devutils-linux-amd64
+          asset_name: devutils-linux-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload Linux arm64 Binary
@@ -76,8 +79,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/adcov-linux-arm64
-          asset_name: adcov-linux-arm64
+          asset_path: ./bin/devutils-linux-arm64
+          asset_name: devutils-linux-arm64
           asset_content_type: application/octet-stream
 
       - name: Upload macOS amd64 Binary
@@ -86,8 +89,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/adcov-darwin-amd64
-          asset_name: adcov-darwin-amd64
+          asset_path: ./bin/devutils-darwin-amd64
+          asset_name: devutils-darwin-amd64
           asset_content_type: application/octet-stream
 
       - name: Upload macOS arm64 Binary
@@ -96,6 +99,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/adcov-darwin-arm64
-          asset_name: adcov-darwin-arm64
+          asset_path: ./bin/devutils-darwin-arm64
+          asset_name: devutils-darwin-arm64
           asset_content_type: application/octet-stream
