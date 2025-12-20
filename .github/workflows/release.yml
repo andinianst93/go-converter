@@ -42,63 +42,14 @@ jobs:
           # Build for macOS (arm64 - Apple Silicon)
           GOOS=darwin GOARCH=arm64 go build -o bin/devutils-darwin-arm64 main.go
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Windows Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/devutils-windows-amd64.exe
-          asset_name: devutils-windows-amd64.exe
-          asset_content_type: application/octet-stream
-
-      - name: Upload Linux amd64 Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/devutils-linux-amd64
-          asset_name: devutils-linux-amd64
-          asset_content_type: application/octet-stream
-
-      - name: Upload Linux arm64 Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/devutils-linux-arm64
-          asset_name: devutils-linux-arm64
-          asset_content_type: application/octet-stream
-
-      - name: Upload macOS amd64 Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/devutils-darwin-amd64
-          asset_name: devutils-darwin-amd64
-          asset_content_type: application/octet-stream
-
-      - name: Upload macOS arm64 Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./bin/devutils-darwin-arm64
-          asset_name: devutils-darwin-arm64
-          asset_content_type: application/octet-stream
+          files: |
+            ./bin/devutils-windows-amd64.exe
+            ./bin/devutils-linux-amd64
+            ./bin/devutils-linux-arm64
+            ./bin/devutils-darwin-amd64
+            ./bin/devutils-darwin-arm64
