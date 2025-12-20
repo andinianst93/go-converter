@@ -2,18 +2,21 @@ package main
 
 import (
 	"bufio"
-	"encoding/base64"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/andinianst94/go-converter/base64"
+	"github.com/andinianst94/go-converter/password"
 )
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("===Base 64 Converter by Andini===")
+	// User must choose if they want to generate a password or encode/decode Base64 text.
+	fmt.Println("===Welcome to DevTools===")
 	fmt.Println("Choose an option:")
-	fmt.Println("1. Encode")
-	fmt.Println("2. Decode")
+	fmt.Println("1. Password Generator")
+	fmt.Println("2. Base64 Converter")
 	fmt.Print("Enter your choice (1 or 2): ")
 
 	choice, _ := reader.ReadString('\n')
@@ -21,46 +24,46 @@ func main() {
 
 	switch choice {
 	case "1":
-		encode(reader)
+		// Password Generator
+		fmt.Println("\n===Password Generator===")
+		fmt.Println("Choose an option:")
+		fmt.Println("1. Generate Password")
+		fmt.Println("2. Generate Password with Custom Length")
+		fmt.Print("Enter your choice (1 or 2): ")
+
+		subChoice, _ := reader.ReadString('\n')
+		subChoice = strings.TrimSpace(subChoice)
+
+		switch subChoice {
+		case "1":
+			password.Generate()
+		case "2":
+			password.GenerateWithCustomLength()
+		default:
+			fmt.Println("Invalid choice. Please run the program again and select 1 or 2.")
+		}
+
 	case "2":
-		decode(reader)
+		// Base64
+		fmt.Println("\n===Base 64 Converter===")
+		fmt.Println("Choose an option:")
+		fmt.Println("1. Encode")
+		fmt.Println("2. Decode")
+		fmt.Print("Enter your choice (1 or 2): ")
+
+		subChoice, _ := reader.ReadString('\n')
+		subChoice = strings.TrimSpace(subChoice)
+
+		switch subChoice {
+		case "1":
+			base64.Encode(reader)
+		case "2":
+			base64.Decode(reader)
+		default:
+			fmt.Println("Invalid choice. Please run the program again and select 1 or 2.")
+		}
+
 	default:
 		fmt.Println("Invalid choice. Please run the program again and select 1 or 2.")
 	}
-}
-
-func encode(reader *bufio.Reader) {
-	fmt.Print("\nEnter plain text to encode: ")
-	plainText, _ := reader.ReadString('\n')
-	plainText = strings.TrimSpace(plainText)
-
-	if plainText == "" {
-		fmt.Println("Error: Empty input")
-		return
-	}
-
-	encoded := base64.StdEncoding.EncodeToString([]byte(plainText))
-	fmt.Println("\nEncoded Base64:")
-	fmt.Println(encoded)
-}
-
-func decode(reader *bufio.Reader) {
-	fmt.Print("\nEnter Base64 text to decode: ")
-	base64Text, _ := reader.ReadString('\n')
-	base64Text = strings.TrimSpace(base64Text)
-
-	if base64Text == "" {
-		fmt.Println("Error: Empty input")
-		return
-	}
-
-	decoded, err := base64.StdEncoding.DecodeString(base64Text)
-	if err != nil {
-		fmt.Printf("Error decoding Base64: %v\n", err)
-		fmt.Println("Make sure the input is valid Base64 text.")
-		return
-	}
-
-	fmt.Println("\nDecoded plain text:")
-	fmt.Println(string(decoded))
 }

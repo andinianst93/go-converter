@@ -1,6 +1,6 @@
 .PHONY: build build-all clean install help
 
-BINARY_NAME=adcov
+BINARY_NAME=devutils
 BUILD_DIR=bin
 SOURCE_FILE=main.go
 
