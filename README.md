@@ -1,12 +1,12 @@
 # DevTools - Password Generator & Base64 Converter
 
-A simple yet powerful command-line tool written in Go for generating strong passwords and encoding/decoding Base64 text.
+A simple command-line tool written in Go for generating strong passwords and encoding/decoding Base64 text.
 
 ## Features
 
 ### Password Generator
 - **Generate 10 Strong Passwords**: Instantly create 10 random, secure passwords with default 20 characters each
-- **Custom Length Support**: Generate 11 passwords with your specified length (minimum 16 characters)
+- **Custom Length Support**: Generate 10 passwords with your specified length (minimum 16 characters)
 - **Strong Security**: Uses cryptographically secure random generation (`crypto/rand`)
 - **Character Diversity**: Includes uppercase, lowercase, numbers, and symbols
 - **Best Practices**: Follows industry standards for password strength
