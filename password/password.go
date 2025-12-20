@@ -23,10 +23,6 @@ func Generate() {
 	}
 
 	fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-	fmt.Println("\n✓ These passwords are STRONG because they:")
-	fmt.Println("  1. Are at least 16 characters long")
-	fmt.Println("  2. Contain mixed-case letters, numbers and symbols")
-	fmt.Println("  3. Are completely random")
 }
 
 // GenerateWithCustomLength creates a strong random password with user-specified length
@@ -50,8 +46,10 @@ func GenerateWithCustomLength() {
 		length = minLength
 	}
 
-	for i := 0; i <= 10; i++ {
+	fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+	for i := 1; i <= 10; i++ {
 		password := GeneratePassword(length)
-		fmt.Printf("  %s\n", password)
+		fmt.Printf("  %2d. %s\n", i, password)
 	}
+	fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 }
